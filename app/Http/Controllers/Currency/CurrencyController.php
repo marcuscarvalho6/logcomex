@@ -36,6 +36,8 @@ class CurrencyController extends Controller
      *  @OA\Get(
      *      path="/api/currency",
      *      @OA\Response(response="200", description="successful operation"),
+     *      @OA\Response(response="422", description="unprocessable entity"),
+     *      @OA\Response(response="204", description="empty response"),
      *      @OA\Parameter(
      *          name="code",
      *          in="query",
