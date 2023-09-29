@@ -1,0 +1,65 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Currencies API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/currency": {
+            "get": {
+                "summary": "Busca informações de uma ou mais moedas",
+                "description": "Esta função tem como objetivo, buscar as informações de uma ou mais moeda através do seu código ISO 4271 ou seu código numérico.\nPor exemplo: <br>\nVocê pode buscar por BRL no campo code, e o sistema se encarregará de buscar as informações, como: nome, código, decimal,\ne países que a utilizam, inclusive com suas bandeiras, caso estejam disponíveis. <br>\nVocê também será capaz de buscar a cotação das suas moedas em relação a uma outra que você informar (não obrigatório) no campo exchange. <br>\nObs: Você só poderá informar um dos campos: code, code_list, number ou number_list por requisição.\npaíses que a utilizam e suas bandeiras",
+                "operationId": "074bfadf5f3f45346e55973f5b74ee74",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Buscar por um codigo ISO 4271 de moeda, exemplo: BRL",
+                        "required": false
+                    },
+                    {
+                        "name": "number",
+                        "in": "query",
+                        "description": "Buscar por um codigo numérico de moeda, exemplo: 986",
+                        "required": false
+                    },
+                    {
+                        "name": "code_list[]",
+                        "in": "query",
+                        "description": "Buscar por um array de codigos ISO 4271 de moeda, exemplo: ['BRL', 'USD']",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "name": "number_list[]",
+                        "in": "query",
+                        "description": "Buscar por um array de codigos numericos de moeda, exemplo: [986, 978]",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "name": "exchange",
+                        "in": "query",
+                        "description": "Se informado, retornará a cotação das moedas buscadas de acordo com o valor informado, ou seja, se você informar USD todas as moedas buscadas retornarão o campo exchange_rate com a cotação em relação a moeda informada nesse campo",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        }
+    }
+}

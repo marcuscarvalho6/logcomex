@@ -23,8 +23,59 @@ class CurrencyController extends Controller
     }
 
     /**
-     * Função principal responsável por retornar os dados desejados
-     * @param CurrencyRequest $request
+     * Busca informações de uma ou mais moedas
+     * 
+     * Esta função tem como objetivo, buscar as informações de uma ou mais moeda através do seu código ISO 4271 ou seu código numérico.
+     * Por exemplo: <br>
+     * Você pode buscar por BRL no campo code, e o sistema se encarregará de buscar as informações, como: nome, código, decimal,
+     * e países que a utilizam, inclusive com suas bandeiras, caso estejam disponíveis. <br>
+     * Você também será capaz de buscar a cotação das suas moedas em relação a uma outra que você informar (não obrigatório) no campo exchange. <br>
+     * Obs: Você só poderá informar um dos campos: code, code_list, number ou number_list por requisição.
+     * países que a utilizam e suas bandeiras
+     *  
+     *  @OA\Get(
+     *      path="/api/currency",
+     *      @OA\Response(response="200", description="successful operation"),
+     *      @OA\Parameter(
+     *          name="code",
+     *          in="query",
+     *          description="Buscar por um codigo ISO 4271 de moeda, exemplo: BRL",
+     *          required=false,
+     *      ),
+     *      @OA\Parameter(
+     *          name="number",
+     *          in="query",
+     *          description="Buscar por um codigo numérico de moeda, exemplo: 986",
+     *          required=false,
+     *      ),
+     *      @OA\Parameter(
+     *          name="code_list[]",
+     *          in="query",
+     *          description="Buscar por um array de codigos ISO 4271 de moeda, exemplo: ['BRL', 'USD']",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="array",
+     *              @OA\Items(type="string")
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="number_list[]",
+     *          in="query",
+     *          description="Buscar por um array de codigos numericos de moeda, exemplo: [986, 978]",
+     *          required=false,
+     *          @OA\Schema(
+     *              type="array",
+     *              @OA\Items(type="integer")
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="exchange",
+     *          in="query",
+     *          description="Se informado, retornará a cotação das moedas buscadas de acordo com o valor informado, ou seja, se você informar USD todas as moedas buscadas retornarão o campo exchange_rate com a cotação em relação a moeda informada nesse campo",
+     *          required=false,
+     *      ),
+     *  ),
+     * 
      * @return array
      */
     public function index(CurrencyRequest $request)

@@ -1,66 +1,94 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+#Desafio backend Logcomex (Captação)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Desafio
+Desenvolver um scrapping/crawler para capturar dados de uma fonte externa que retorne um JSON contendo informações de moedas e os países que a utilizam.
 
-## About Laravel
+## Stacks utilizadas
+O teste foi desenvolvido utilizando as seguintes s stacks:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP
+	- Laravel
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Banco de Dados Relacional
+	- MySQL
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Banco de dados não relacional
+	- Redis
 
-## Learning Laravel
+- Configuração da infra
+	-	Docker
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Como iniciar o projeto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Clonar  repositorio
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Para clonar o repositório, você deve executar o seguinte comando:
 
-## Laravel Sponsors
+`git clone git@github.com:marcuscarvalho6/logcomex.git`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+### Inicializar o docker
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Após clonar o repositório, vamos criar o nosso .env a partir do nosso .env.example com o comando abaixo:
 
-## Contributing
+`cp .env.example .env`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Agora precisamos buildar nossas imagens do docker. Para isso vá até a pasta do projeto e execute:
 
-## Code of Conduct
+`docker compose up -d`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Depois de completado, vamos verificar se todos os containers subiram encontram-se ativos.
 
-## Security Vulnerabilities
+`docker ps`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Você deve encontrar 5 containers atvios com os seguintes nomes:
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- logcomex-nginx-1
+- logcomex-db-1
+- fppadmin-docker-app-1
+- logcomex-redis-1
+- logcomex-app-1
+
+### Configurar o projeto Laravel
+
+Após isso, podemos verificar que todos os serviços encontram-se ativos, e podemos dar início aos procedimentos restantes.
+
+Para isso precisamos entrar no bash do container `logcomex-app-1` da seguinte forma:
+
+`docker exec -it logcomex-app-1 /bin/bash`
+
+Você deve ver algo similar a:
+
+`logcomex@abbcb1ef5717:/var/www$`
+
+Agora você está acessando o container com um usuário não root, e vamos instalar as dependencias do projeto através do composer. Então, execute dentro da mesma pasta citada acima:
+
+`composer install`
+
+Gere uma nova chave para sua aplicação laravel:
+
+`php artisan key:generate`
+
+### Gerando a estrutura da dados do MySQL
+
+Vamos orecisar rodar nossas migrations para que as tabelas necessárias sejam criadas:
+
+`php artisan:migrate`
+
+Pronto, provavelmente você ja pode visualizar suas tabelas recém criadas, e agora vamos iniciar a população das mesmas através de um crawler/scrapping.
+
+Ainda dentro do container `logcomex-app-1` em `/var/www` vamos executar o comando:
+
+`php artisan app:crawler`
+
+!Aguarde, isso pode demorar um pouco. Você será ciente do início ao fim do procedimento através do seu terminal sobre o processo em execução, e assim que finalizado, uma mensagem será exibida no seu console e o processo terminará automaticamente.
+
+Verifique se as tabelas `currencies` e `countries` foram populadas corretamente.
+
+Caso estejam. Seu projeto estará pronto para uso, e você pode utilizar o swagger através da url:
+
+`http://localhost:8090/api/documentation`
+
+
+

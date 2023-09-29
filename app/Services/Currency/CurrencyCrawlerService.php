@@ -271,7 +271,10 @@ class CurrencyCrawlerService
                 // Agora precisamos buscar os registros das flags de cada uma das locations pertencentes a moeda
                 $currency->locations = collect($currenciesResponse[$currency->code])->transform(function($location) {
                     // Fazemos a atribuição caso seja encontrada ou retornamos null
-                    $location['flag'] = $this->countryRepository->findFlagByCountry($location['country'])->toArray() ?? null;
+                    $flag = $this->countryRepository->findFlagByCountry($location['country'])->toArray();
+                    if(count($flag)) {
+                        $location = array_merge($location, $flag);
+                    }
                     return $location;
                 });
                 /**
