@@ -12,7 +12,7 @@ O teste foi desenvolvido utilizando as seguintes s stacks:
 - Banco de Dados Relacional
 	- MySQL
 
-- Banco de dados não relacional
+- Caching
 	- Redis
 
 - Configuração da infra
