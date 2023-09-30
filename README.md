@@ -46,7 +46,6 @@ Você deve encontrar 5 containers atvios com os seguintes nomes:
 
 - logcomex-nginx-1
 - logcomex-db-1
-- fppadmin-docker-app-1
 - logcomex-redis-1
 - logcomex-app-1
 
